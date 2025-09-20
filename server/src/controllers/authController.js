@@ -36,7 +36,8 @@ export const register = asyncHandler(async (req, res) => {
     user: {
       id: user.id,
       name: user.name,
-      email: user.email
+      email: user.email,
+      role: user.role
     },
     token
   });
@@ -70,12 +71,22 @@ export const login = asyncHandler(async (req, res) => {
     user: {
       id: user.id,
       name: user.name,
-      email: user.email
+      email: user.email,
+      role: user.role
     },
     token
   });
 });
 
 export const getProfile = asyncHandler(async (req, res) => {
-  res.status(200).json(req.user);
+  const user = await prisma.user.findUnique({
+    where: { id: req.user.id },
+    select: { id: true, name: true, email: true, role: true },
+  });
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  res.status(200).json(user);
 });

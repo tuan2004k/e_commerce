@@ -1,6 +1,7 @@
 // services/UserService.js
 import prisma from '../config/database.js';
 import bcrypt from 'bcryptjs';
+// import { getAllUsers } from '../controllers/UserController.js';
 
 const UserService = {
   async createUser({ email, password, name, role }) {
@@ -22,6 +23,8 @@ const UserService = {
     const isValid = await bcrypt.compare(password, user.password);
     return isValid ? user : null;
   },
+ 
+  
 
   async getUserById(id) {
     return prisma.user.findUnique({ where: { id } });
