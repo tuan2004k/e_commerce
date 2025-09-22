@@ -1,21 +1,60 @@
+import React, { useState } from 'react';
+import Sidebar from '../../components/common/Sidebar';
+import Header from '../../components/common/Header';
+import DashboardContent from '../../components/admin/DashboardContent';
+import { Routes, Route } from 'react-router-dom';
+import ProductManagement from './ProductManagement';
+import CategoryManagement from './CategoryManagement';
+import BrandManagement from './BrandManagement';
+import UserManagement from './UserManagement';
+import OrderManagement from './OrderManagement';
+import DiscountManagement from './DiscountManagement';
+import AnalyticsPage from './AnalyticsPage';
+
 function AdminDashboard() {
-    return (
-      <div className="bg-gray-100 flex items-center justify-center h-screen">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
-          <h2 className="text-2xl font-bold text-center mb-4">Trang Quản Trị Viên</h2>
-          <p className="text-center text-gray-700">Chào mừng bạn đến với giao diện quản trị viên!</p>
-          <div className="mt-4">
-            <p className="text-sm text-gray-600">Đây là nơi bạn có thể quản lý sản phẩm, đơn hàng, và người dùng.</p>
-          </div>
-          <button
-            onClick={() => localStorage.removeItem('token') && window.location.assign('/login')}
-            className="mt-6 w-full bg-red-600 text-white p-2 rounded-md hover:bg-red-700"
-          >
-            Đăng xuất
-          </button>
-        </div>
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+  };
+
+  return (
+    <div className="flex min-h-screen bg-gray-100 relative">
+      <Sidebar
+        isSidebarOpen={isSidebarOpen}
+        collapsed={collapsed}
+        toggleCollapsed={toggleCollapsed}
+        toggleSidebar={toggleSidebar}
+      />
+
+      <div className={`flex-1 flex flex-col mt-16 transition-all duration-300 ease-in-out md:${collapsed ? 'ml-16' : 'ml-64'}`}>
+        <Header
+          toggleSidebar={toggleSidebar}
+          isSidebarOpen={isSidebarOpen}
+          collapsed={collapsed}
+          toggleCollapsed={toggleCollapsed}
+        />
+
+        <main className="flex-1 p-6">
+          <Routes>
+            <Route index element={<DashboardContent />} /> 
+            <Route path="products" element={<ProductManagement />} />
+            <Route path="categories" element={<CategoryManagement />} />
+            <Route path="brands" element={<BrandManagement />} />
+            <Route path="users" element={<UserManagement />} />
+            <Route path="orders" element={<OrderManagement />} />
+            <Route path="discounts" element={<DiscountManagement />} />
+            <Route path="analytics" element={<AnalyticsPage />} />
+          </Routes>
+        </main>
       </div>
-    );
-  }
-  
-  export default AdminDashboard;
+    </div>
+  );
+}
+
+export default AdminDashboard;

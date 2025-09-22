@@ -1,28 +1,50 @@
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext'; // Adjust path if necessary
-import { ROLES } from '../../utils/constants'; // Assuming you have ROLES defined
+import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import { getCurrentUser } from '../../services/authServices';
 
-const ProtectedRoute = ({ allowedRoles }) => {
-  const { user, loading } = useAuth();
+const ProtectedRoute = ({ children, requiredRole }) => {
+  const [isAuthorized, setIsAuthorized] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  console.log('ProtectedRoute Debug:', { isAuthenticated: !!user, user, loading, allowedRoles });
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const user = await getCurrentUser();
+        console.log('ProtectedRoute User:', user);
+        console.log('ProtectedRoute Required Role:', requiredRole);
+
+        if (!user) {
+          setIsAuthorized(false);
+          return;
+        }
+
+        let authorized = false;
+        if (user.role === requiredRole) {
+          authorized = true;
+        } else if (user.role === 'ADMIN' && requiredRole === 'CUSTOMER') {
+          authorized = true;
+        }
+
+        setIsAuthorized(authorized);
+      } catch (error) {
+        console.error('ProtectedRoute Error:', error);
+        setIsAuthorized(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkAuth();
+  }, [requiredRole]);
 
   if (loading) {
-    return <div>Loading...</div>; // Or a spinner component
+    return <div>Đang tải...</div>;
   }
 
-  // Check if user is authenticated (user object exists)
-  if (!user) {
-    return <Navigate to="/login" replace />;
+  if (isAuthorized === null) {
+    return <div>Đang kiểm tra quyền...</div>;
   }
 
-  // Check if user has one of the allowed roles
-  if (allowedRoles && !allowedRoles.map(role => role.toLowerCase()).includes(user?.role?.toLowerCase())) {
-    return <Navigate to="/unauthorized" replace />;
-  }
-
-  return <Outlet />;
+  return isAuthorized ? children : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;

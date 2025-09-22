@@ -3,7 +3,7 @@ import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import CustomerDashboard from '../pages/customer/CustomerDashboard';
 import AdminDashboard from '../pages/admin/AdminDashboard';
-// import ProtectedRoute from '../components/auth/Protect'; // Comment out ProtectedRoute
+import ProtectedRoute from '../components/common/ProtectedRoute';
 
 function AppRouter() {
   return (
@@ -11,8 +11,22 @@ function AppRouter() {
       <Route path="/" element={<LoginPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="/customer" element={<CustomerDashboard />} />
+      <Route
+        path="/admin/*"
+        element={
+          <ProtectedRoute requiredRole="ADMIN">
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/customer/*"
+        element={
+          <ProtectedRoute requiredRole="CUSTOMER">
+            <CustomerDashboard />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }
