@@ -35,8 +35,7 @@ export const getCurrentUser = async () => {
     return storedUser ? JSON.parse(storedUser) : response.data.user;
   } catch (error) {
     console.error("Error getting current user:", error);
-    localStorage.removeItem('token'); // Clear invalid token
-    localStorage.removeItem('user'); // Clear user data as well
+    localStorage.removeItem('token'); 
     throw error.response?.data || { message: 'Không thể lấy thông tin người dùng!' };
   }
 };

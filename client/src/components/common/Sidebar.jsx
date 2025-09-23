@@ -1,13 +1,35 @@
-import { useState } from 'react';
-import { MenuItem } from './MenuItems';
+import { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, LayoutDashboard, ShoppingCart, Package, Users, ClipboardList, Percent, BarChart } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import MenuItem from './MenuItems';
 
 function Sidebar({ isSidebarOpen, collapsed, toggleCollapsed, toggleSidebar }) {
-  const [activeItem, setActiveItem] = useState('/admin');
+  const [activeItem, setActiveItem] = useState('/admin/dashboard');
   const [openSubmenu, setOpenSubmenu] = useState(null);
+  const location = useLocation();
 
-  const handleLogout = () => {
-    window.location.assign('/login');
-  };
+  useEffect(() => {
+    const currentPath = location.pathname;
+    let foundActive = '';
+    let foundOpenSubmenu = null;
+
+    menuItems.forEach(item => {
+      if (item.path && currentPath.startsWith(item.path)) {
+        foundActive = item.path;
+      }
+      if (item.children) {
+        item.children.forEach(child => {
+          if (child.path && currentPath.startsWith(child.path)) {
+            foundActive = item.path; 
+            foundOpenSubmenu = item.key;
+          }
+        });
+      }
+    });
+
+    setActiveItem(foundActive || '/admin/dashboard');
+    setOpenSubmenu(foundOpenSubmenu);
+  }, [location.pathname]);
 
   const toggleSubmenu = (key) => {
     setOpenSubmenu(openSubmenu === key ? null : key);
@@ -18,64 +40,49 @@ function Sidebar({ isSidebarOpen, collapsed, toggleCollapsed, toggleSidebar }) {
       key: '0',
       label: 'Dashboard',
       path: '/admin/dashboard',
+      icon: LayoutDashboard,
     },
     {
       key: '1',
       label: 'Quản lý sản phẩm',
+      path: '/admin/products', 
+      icon: Package,
       children: [
-        {
-          key: '1-1',
-          label: 'Sản phẩm',
-          path: '/admin/products',
-        },
-        {
-          key: '1-2',
-          label: 'Danh mục',
-          path: '/admin/categories',
-        },
-        {
-          key: '1-3',
-          label: 'Thương hiệu',
-          path: '/admin/brands',
-        },
+        { key: '1-1', label: 'Sản phẩm', path: '/admin/products' },
+        { key: '1-2', label: 'Danh mục', path: '/admin/categories' },
+        { key: '1-3', label: 'Thương hiệu', path: '/admin/brands' },
       ],
     },
-    {
-      key: '2',
-      label: 'Quản lý người dùng',
-      path: '/admin/users',
-    },
-    {
-      key: '3',
-      label: 'Quản lý đơn hàng',
-      path: '/admin/orders',
-    },
-    {
-      key: '4',
-      label: 'Quản lý khuyến mãi',
-      path: '/admin/discounts',
-    },
-    {
-      key: '5',
-      label: 'Báo cáo & Thống kê',
-      path: '/admin/analytics',
-    },
+    { key: '2', label: 'Quản lý người dùng', path: '/admin/users', icon: Users },
+    { key: '3', label: 'Quản lý đơn hàng', path: '/admin/orders', icon: ClipboardList },
+    { key: '4', label: 'Quản lý khuyến mãi', path: '/admin/discounts', icon: Percent },
+    { key: '5', label: 'Báo cáo & Thống kê', path: '/admin/analytics', icon: BarChart },
   ];
 
   return (
     <>
       <div
-        className={`bg-blue-800 text-white transition-all duration-300 fixed top-16 left-0 bottom-0 z-40 flex flex-col 
-        ${isSidebarOpen ? 'block' : 'hidden'}
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        ${collapsed ? 'w-16' : 'w-64'}
-        md:block md:translate-x-0
-      `}
+        className={`bg-white text-gray-800 border-r border-gray-200 transition-all duration-300 fixed top-0 left-0 bottom-0 z-40 flex flex-col 
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+          ${collapsed ? 'w-16' : 'w-64'}
+          md:translate-x-0
+        `}
       >
-        <div className="flex items-center justify-between p-2 order-b border-blue-800">
+        {/* Logo */}
+        <div className="flex items-center justify-center p-6 border-b border-gray-200">
+          {collapsed ? (
+            <img src="./public/vite.svg" alt="Logo" className="w-8 h-8" />
+          ) : (
+            <div className="flex items-center space-x-2">
+              <img src="./public/vite.svg" alt="Logo" className="w-8 h-8" />
+              <span className="text-lg font-bold">Admin Panel</span>
+            </div>
+          )}
         </div>
-        <nav className="mt-4 flex-grow">
-          <ul className="space-y-1">
+
+        {/* Menu */}
+        <nav className="mt-4 flex-grow overflow-y-auto">
+          <ul className="space-y-1 px-2">
             {menuItems.map((item) => {
               const isActive = activeItem === item.path;
               const isOpen = openSubmenu === item.key;
@@ -87,56 +94,20 @@ function Sidebar({ isSidebarOpen, collapsed, toggleCollapsed, toggleSidebar }) {
                   collapsed={collapsed}
                   toggleSubmenu={toggleSubmenu}
                   isOpen={isOpen}
-                  setActiveItem={setActiveItem}
                 />
               );
             })}
           </ul>
         </nav>
-        <div className="mt-auto w-full">
-          <button
-            onClick={toggleCollapsed}
-            className="w-full text-white p-4 rounded hover:bg-blue-700 transition-colors duration-200 md:hidden"
-          >
-            {collapsed ? (
-              <svg className="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-              </svg>
-            ) : (
-              <svg className="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7M19 19l-7-7 7-7" />
-              </svg>
-            )}
-          </button>
-          <div className="hidden md:block p-0 mb-0">
-            <button
-              onClick={toggleCollapsed}
-              className="w-full text-white p-4 rounded hover:bg-blue-700 transition-colors duration-200 md:hidden"
-            >
-              {collapsed ? (
-                <svg className="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                </svg>
-              ) : (
-                <svg className="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7M19 19l-7-7 7-7" />
-                </svg>
-              )}
-            </button>
-          </div>
-        </div>
-
       </div>
-
       {isSidebarOpen && (
         <div
           onClick={toggleSidebar}
           className="fixed top-16 left-0 w-full h-[calc(100vh-4rem)] bg-black opacity-50 z-30 md:hidden"
-        ></div>
+        />
       )}
     </>
   );
 }
 
 export default Sidebar;
-

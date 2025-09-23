@@ -16,7 +16,6 @@ const HomePage = () => {
         ) : (
           <p className="text-gray-600">Please log in or register to continue shopping.</p>
         )}
-        {/* Add more content for the home page, e.g., product listings */}
       </main>
       <Footer />
     </div>

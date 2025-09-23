@@ -31,7 +31,7 @@ const prisma = new PrismaClient();
 const app = express();
 
 app.use(cors()); // Use CORS middleware
-app.use(bodyParser.json());
+// app.use(bodyParser.json()); // Removed to prevent conflict with multer for multipart/form-data
 app.use(requestLogger); // Use requestLogger middleware
 
 // Serve static uploaded files

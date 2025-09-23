@@ -170,7 +170,7 @@ router.post('/', protect, authorize(['ADMIN']), upload.single('image'), createPr
  *         description: Server error
  */
 router.get('/:id', getProductById);
-router.put('/:id', protect, authorize(['ADMIN']), updateProduct);
+router.put('/:id', protect, authorize(['ADMIN']), upload.single('image'), updateProduct);
 router.delete('/:id', protect, authorize(['ADMIN']), deleteProduct);
 
 export default router;
