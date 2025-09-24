@@ -23,19 +23,19 @@ export const getProductById = asyncHandler(async (req, res) => {
 export const createProduct = asyncHandler(async (req, res) => {
   let productData;
   try {
-      productData = JSON.parse(req.body.productData);
-      console.log("Server - Parsed productData for create:", productData);
+    productData = JSON.parse(req.body.productData);
+    console.log("Server - Parsed productData for create:", productData);
   } catch (error) {
-      console.error("Server - Error parsing productData for create:", error);
-      return res.status(400).json({ message: "Invalid product data format." });
+    console.error("Server - Error parsing productData for create:", error);
+    return res.status(400).json({ message: "Invalid product data format." });
   }
 
   const { name, description, price, stock, size, color, categoryId } = productData;
-  
+
   let imagePath = null;
   if (req.file) {
-      imagePath = `/uploads/${req.file.filename}`;
-      console.log("Server - New image uploaded for create:", imagePath);
+    imagePath = `/uploads/${req.file.filename}`;
+    console.log("Server - New image uploaded for create:", imagePath);
   }
 
   const newProductData = {
@@ -61,28 +61,30 @@ export const createProduct = asyncHandler(async (req, res) => {
 export const updateProduct = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  console.log("Server - Product ID from params:", id);
   let productData;
   try {
-      productData = JSON.parse(req.body.productData);
-      console.log("Server - Parsed productData:", productData);
+    productData = JSON.parse(req.body.productData);
   } catch (error) {
-      console.error("Server - Error parsing productData:", error);
-      return res.status(400).json({ message: "Invalid product data format." });
+    console.error("Server - Error parsing productData for update:", error);
+    return res.status(400).json({ message: "Invalid product data format." });
+  }
+
+  const existingProduct = await prisma.product.findUnique({
+    where: { id: parseInt(id) },
+  });
+
+  if (!existingProduct) {
+    return res.status(404).json({ message: "Product not found." });
   }
 
   const { name, description, price, stock, size, color, categoryId } = productData;
 
-  let imagePath = req.body.image; // Assume existing image if no new one is uploaded
+  let imagePath = existingProduct.image;
+
   if (req.file) {
-      imagePath = `/uploads/${req.file.filename}`;
-      console.log("Server - New image uploaded:", imagePath);
+    imagePath = `/uploads/${req.file.filename}`;
   } else if (productData.image === null) {
-      // If client explicitly sent image: null, remove image
-      imagePath = null;
-      console.log("Server - Image explicitly set to null.");
-  } else {
-      console.log("Server - Retaining existing image path:", imagePath);
+    imagePath = null;
   }
 
   const dataToUpdate = {
@@ -95,8 +97,6 @@ export const updateProduct = asyncHandler(async (req, res) => {
     color,
     categoryId: parseInt(categoryId),
   };
-  console.log("Server - Data to update in Prisma:", dataToUpdate);
-
   const product = await prisma.product.update({
     where: { id: parseInt(id) },
     data: dataToUpdate,

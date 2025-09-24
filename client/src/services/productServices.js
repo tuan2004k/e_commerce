@@ -20,7 +20,11 @@ const getProductById = async (id) => {
 
 const createProduct = async (productData) => {
   try {
-    const response = await api.post('/products', productData);
+    const headers = {};
+    if (productData instanceof FormData) {
+      headers['Content-Type'] = 'multipart/form-data';
+    }
+    const response = await api.post('/products', productData, { headers });
     return response.data;
   } catch (error) {
     throw error;
@@ -29,7 +33,11 @@ const createProduct = async (productData) => {
 
 const updateProduct = async (id, productData) => {
   try {
-    const response = await api.put(`/products/${id}`, productData);
+    const headers = {};
+    if (productData instanceof FormData) {
+      headers['Content-Type'] = 'multipart/form-data';
+    }
+    const response = await api.put(`/products/${id}`, productData, { headers });
     return response.data;
   } catch (error) {
     throw error;

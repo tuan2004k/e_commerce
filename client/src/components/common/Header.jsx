@@ -8,7 +8,7 @@ import {
   ChevronDown,
   ChevronRight,
 } from "lucide-react";
-import UserProfileDropdown from './UserProfileDropdown'; // Import the new component
+import UserProfileDropdown from './UserProfileDropdown'; 
 
 function Header({
   toggleSidebar,
@@ -18,18 +18,6 @@ function Header({
   currentPage = "Dashboard",
 }) {
   const [showNotifications, setShowNotifications] = useState(false);
-  // Removed: const [showUserMenu, setShowUserMenu] = useState(false);
-  // Removed: const [showProfilePopup, setShowProfilePopup] = useState(false);
-  // Removed: const [user, setUser] = useState(null); // State to store user data
-
-  // Removed: Function to load user from localStorage
-  // Removed: useEffect(() => {
-  // Removed:   const storedUser = localStorage.getItem('user');
-  // Removed:   if (storedUser) {
-  // Removed:     setUser(JSON.parse(storedUser));
-  // Removed:   }
-  // Removed: }, []);
-
   const PageIcon = LayoutDashboard;
 
   return (
@@ -38,17 +26,13 @@ function Header({
         ${collapsed ? "left-0 md:left-16" : "left-0 md:left-64"}
       `}
     >
-      {/* Left side */}
       <div className="flex items-center space-x-4">
-        {/* Mobile toggle */}
         <button
           onClick={toggleSidebar}
           className="text-gray-600 md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
         >
           {isSidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
-
-        {/* Desktop collapse toggle */}
         <button
           onClick={toggleCollapsed}
           className="text-gray-600 p-2 rounded-lg hover:bg-gray-100 hidden md:flex items-center justify-center transition"
@@ -60,16 +44,13 @@ function Header({
           )}
         </button>
 
-        {/* Page title */}
         <div className="flex items-center">
           <PageIcon className="w-5 h-5 text-gray-600 mr-2" />
           <h1 className="text-lg font-semibold text-gray-800">{currentPage}</h1>
         </div>
       </div>
 
-      {/* Right side */}
       <div className="flex items-center space-x-5">
-        {/* Notifications */}
         <div className="relative">
           <button
             onClick={() => setShowNotifications(!showNotifications)}
@@ -105,9 +86,7 @@ function Header({
             </div>
           )}
         </div>
-        {/* User menu */}
-        <UserProfileDropdown /> {/* Render the new component */}
-        {/* Removed original User menu JSX */}
+        <UserProfileDropdown /> 
 
       </div>
     </div>
