@@ -52,3 +52,34 @@ export const logout = async () => {
     throw error.response?.data || { message: 'Đăng xuất thất bại!' };
   }
 };
+
+export const sendPasswordResetEmail = async (email) => {
+  try {
+    const response = await api.post('/auth/forgot-password', { email });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: 'Không thể gửi email đặt lại mật khẩu!' };
+  }
+};
+
+export const resetPassword = async (token, password) => {
+  try {
+    const response = await api.post(`/auth/reset-password/${token}`, { password });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: 'Không thể đặt lại mật khẩu!' };
+  }
+};
+
+export const googleLogin = async (token) => {
+  try {
+    const response = await api.post('/auth/google-login', { token });
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+    }
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: 'Đăng nhập bằng Google thất bại!' };
+  }
+};

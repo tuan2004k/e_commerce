@@ -9,14 +9,18 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@prisma/client": "^6.16.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
+    "google-auth-library": "^10.3.0",
+    "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
+    "nodemailer": "^7.0.6",
     "pg": "^8.16.3",
     "protect": "^0.5.0",
     "react": "^19.1.1",
@@ -24,8 +28,7 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "winston": "^3.17.0",
-    "yamljs": "^0.3.0",
-    "@prisma/client": "^6.16.1"
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

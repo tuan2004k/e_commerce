@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
+import ResetPasswordPage from '../pages/auth/ResetPasswordPage'; // Import ResetPasswordPage
 import CustomerDashboard from '../pages/customer/CustomerDashboard';
 import AdminLayout from '../pages/admin/AdminLayout';
 import ProtectedRoute from '../components/common/ProtectedRoute';
@@ -13,6 +14,7 @@ function AppRouter() {
       <Route path="/" element={<LoginPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/reset-password/:token" element={<ResetPasswordPage />} /> {/* Add this route */}
       
       <Route
         path="/admin/*"

@@ -37,13 +37,12 @@ export const useAuth = () => {
         localStorage.setItem('token', response.token);
       }
 
-      // Kiểm tra vai trò và điều hướng
       const role = response.user?.role;
       
       if (role === 'CUSTOMER') {
         navigate('/customer');
       } else if (role === 'ADMIN') {
-        navigate('/admin');
+        navigate('/admin/dashboard'); 
       } 
 
       return response;

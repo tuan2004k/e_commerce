@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
 import cors from 'cors'; 
+import helmet from 'helmet'; 
 import requestLogger from './src/middleware/requestLogger.js'; 
 import errorHandler from './src/middleware/errorHandler.js'; 
 import userRoutes from './src/routes/user.routes.js'; 
@@ -29,10 +30,15 @@ dotenv.config();
 const prisma = new PrismaClient();
 const app = express();
 
+app.use(helmet({
+})); // Use helmet with COOP and COEP policies
 app.use(cors()); 
 app.use(requestLogger); 
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', (req, res, next) => {
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+}, express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs)); 
 

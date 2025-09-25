@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, login, getProfile } from '../controllers/authController.js';
+import { register, login, getProfile, forgotPassword, resetPassword, googleLogin } from '../controllers/authController.js';
 import protect from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -156,5 +156,102 @@ router.post('/login', login);
  *         description: Server error
  */
 router.get('/profile', protect, getProfile);
+
+/**
+ * @swagger
+ * /api/auth/forgot-password:
+ *   post:
+ *     summary: Request a password reset
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *             example:
+ *               email: user@example.com
+ *     responses:
+ *       200:
+ *         description: Password reset email sent
+ *       400:
+ *         description: Invalid email
+ *       500:
+ *         description: Server error
+ */
+router.post('/forgot-password', forgotPassword);
+
+/**
+ * @swagger
+ * /api/auth/reset-password/{token}:
+ *   post:
+ *     summary: Reset user password
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The password reset token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - password
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 format: password
+ *             example:
+ *               password: newpassword123
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
+ *       400:
+ *         description: Invalid token or expired token
+ *       500:
+ *         description: Server error
+ */
+router.post('/reset-password/:token', resetPassword);
+
+/**
+ * @swagger
+ * /api/auth/google-login:
+ *   post:
+ *     summary: Authenticate or register user with Google
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - token
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: Google ID token or access token
+ *             example:
+ *               token: your_google_access_token
+ *     responses:
+ *       200:
+ *         description: User authenticated or registered successfully
+ *       400:
+ *         description: Invalid Google token
+ *       500:
+ *         description: Server error
+ */
+router.post('/google-login', googleLogin);
 
 export default router;
