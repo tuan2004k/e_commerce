@@ -1,10 +1,11 @@
 import LoginForm from '../../components/auth/LoginForm';
 import ForgotPasswordForm from '../../components/auth/ForgotPasswordForm';
-import RegisterForm from '../../components/auth/RegisterForm'; // Import RegisterForm
+import RegisterForm from '../../components/auth/RegisterForm';
+import GoogleLoginButton from '../../components/auth/ButtonGoogle'; // Thêm dòng này
 import { useState } from 'react';
 
 function LoginPage() {
-  const [currentForm, setCurrentForm] = useState('login'); // 'login', 'register', or 'forgotPassword'
+  const [currentForm, setCurrentForm] = useState('login');
 
   const toggleForm = (formName) => {
     setCurrentForm(formName);
@@ -13,7 +14,14 @@ function LoginPage() {
   const renderForm = () => {
     switch (currentForm) {
       case 'login':
-        return <LoginForm toggleForm={toggleForm} />;
+        return (
+          <>
+            <LoginForm toggleForm={toggleForm} />
+            <div className="my-4 text-center">
+              <GoogleLoginButton /> {/* Thêm nút đăng nhập Google */}
+            </div>
+          </>
+        );
       case 'register':
         return <RegisterForm toggleForm={toggleForm} />;
       case 'forgotPassword':

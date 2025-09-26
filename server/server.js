@@ -31,7 +31,7 @@ const prisma = new PrismaClient();
 const app = express();
 
 app.use(helmet({
-})); // Use helmet with COOP and COEP policies
+})); 
 app.use(cors()); 
 app.use(requestLogger); 
 app.use(express.json());

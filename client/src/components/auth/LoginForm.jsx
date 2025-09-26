@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import { googleLogin } from '../../services/authServices'; // Import googleLogin
-import { GoogleLogin } from '@react-oauth/google'; // Import GoogleLogin component
+// Import GoogleLogin component
 
 function LoginForm({ toggleForm }) {
   const [formData, setFormData] = useState({
@@ -18,18 +17,6 @@ function LoginForm({ toggleForm }) {
     e.preventDefault();
     await login(formData);
   };
-
-  const handleGoogleLoginSuccess = async (tokenResponse) => {
-    try {
-      
-      await googleLogin(tokenResponse.credential);
-    } catch (error) {
-      console.error("Google login failed on backend:", error);
-
-    }
-  };
-
-
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold text-center">Đăng nhập</h2>
@@ -67,16 +54,6 @@ function LoginForm({ toggleForm }) {
       >
         {loading ? 'Đang xử lý...' : 'Đăng nhập'}
       </button>
-      {/* Replace the custom Google button with GoogleLogin component */}
-      <div className="w-full flex justify-center mt-4">
-        <GoogleLogin
-          onSuccess={handleGoogleLoginSuccess}
-          onError={() => {
-            console.log('Google login failed!');
-          }}
-          useOneTap
-        />
-      </div>
       <p className="text-center text-sm">
         <a href="#" onClick={(e) => { e.preventDefault(); toggleForm('forgotPassword'); }} className="text-blue-600 hover:underline">
           Quên mật khẩu?
