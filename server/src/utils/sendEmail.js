@@ -2,27 +2,25 @@ import nodemailer from 'nodemailer';
 
 const sendEmail = async (options) => {
   try {
-    // FIXED: Đúng tên method là createTransport (không có "er")
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       host: 'smtp.gmail.com',
       port: 587,
-      secure: false, // Use TLS
+      secure: false, 
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD, // App Password
+        pass: process.env.EMAIL_PASSWORD,
       },
       tls: {
         rejectUnauthorized: false
       }
     });
 
-    // Verify transporter configuration
     await transporter.verify();
 
     const mailOptions = {
       from: {
-        name: 'Your App Name',
+        name: 'Mr.TUAN',
         address: process.env.EMAIL_USER
       },
       to: options.email,
