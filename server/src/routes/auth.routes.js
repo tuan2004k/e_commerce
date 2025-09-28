@@ -1,5 +1,19 @@
 import express from 'express';
-import { register, login, getProfile, forgotPassword, resetPassword, googleLogin } from '../controllers/authController.js';
+import {
+  register,
+  login,
+  getProfile,
+  forgotPassword,
+  resetPassword,
+  googleLogin,
+} from '../controllers/authController.js';
+import {
+  validateRegister,
+  validateLogin,
+  validateForgotPassword,
+  validateResetPassword,
+  validateGoogleLogin,
+} from '../middleware/validate.js';
 import protect from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -36,6 +50,7 @@ const router = express.Router();
  *               password:
  *                 type: string
  *                 format: password
+ *                 description: Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number
  *               role:
  *                 type: string
  *                 enum:
@@ -45,7 +60,7 @@ const router = express.Router();
  *             example:
  *               name: John Doe
  *               email: john.doe@example.com
- *               password: password123
+ *               password: Password123
  *               role: CUSTOMER
  *     responses:
  *       201:
@@ -66,6 +81,8 @@ const router = express.Router();
  *                       type: string
  *                     email:
  *                       type: string
+ *                     role:
+ *                       type: string
  *                 token:
  *                   type: string
  *       400:
@@ -73,7 +90,7 @@ const router = express.Router();
  *       500:
  *         description: Server error
  */
-router.post('/register', register);
+router.post('/register', validateRegister, register);
 
 /**
  * @swagger
@@ -98,8 +115,8 @@ router.post('/register', register);
  *                 type: string
  *                 format: password
  *             example:
- *               email: dautuan032004@gmail.com
- *               password: minhtuan73cqqb@
+ *               email: john.doe@example.com
+ *               password: Password123
  *     responses:
  *       200:
  *         description: Logged in successfully
@@ -119,14 +136,16 @@ router.post('/register', register);
  *                       type: string
  *                     email:
  *                       type: string
+ *                     role:
+ *                       type: string
  *                 token:
  *                   type: string
  *       400:
- *         description: Invalid credentials
+ *         description: Invalid credentials or invalid input
  *       500:
  *         description: Server error
  */
-router.post('/login', login);
+router.post('/login', validateLogin, login);
 
 /**
  * @swagger
@@ -150,8 +169,12 @@ router.post('/login', login);
  *                   type: string
  *                 email:
  *                   type: string
+ *                 role:
+ *                   type: string
  *       401:
  *         description: Not authorized
+ *       404:
+ *         description: User not found
  *       500:
  *         description: Server error
  */
@@ -176,16 +199,18 @@ router.get('/profile', protect, getProfile);
  *                 type: string
  *                 format: email
  *             example:
- *               email: user@example.com
+ *               email: john.doe@example.com
  *     responses:
  *       200:
  *         description: Password reset email sent
  *       400:
  *         description: Invalid email
+ *       404:
+ *         description: User not found
  *       500:
  *         description: Server error
  */
-router.post('/forgot-password', forgotPassword);
+router.post('/forgot-password', validateForgotPassword, forgotPassword);
 
 /**
  * @swagger
@@ -212,17 +237,18 @@ router.post('/forgot-password', forgotPassword);
  *               password:
  *                 type: string
  *                 format: password
+ *                 description: Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number
  *             example:
- *               password: newpassword123
+ *               password: NewPassword123
  *     responses:
  *       200:
  *         description: Password reset successfully
  *       400:
- *         description: Invalid token or expired token
+ *         description: Invalid token, expired token, or invalid password
  *       500:
  *         description: Server error
  */
-router.post('/reset-password/:token', resetPassword);
+router.post('/reset-password/:token', validateResetPassword, resetPassword);
 
 /**
  * @swagger
@@ -241,17 +267,37 @@ router.post('/reset-password/:token', resetPassword);
  *             properties:
  *               token:
  *                 type: string
- *                 description: Google ID token or access token
+ *                 description: Google ID token
  *             example:
- *               token: your_google_access_token
+ *               token: your_google_id_token
  *     responses:
  *       200:
  *         description: User authenticated or registered successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                     name:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     role:
+ *                       type: string
+ *                 token:
+ *                   type: string
  *       400:
- *         description: Invalid Google token
+ *         description: Invalid Google token or missing email
  *       500:
  *         description: Server error
  */
-router.post('/google-login', googleLogin);
+router.post('/google-login', validateGoogleLogin, googleLogin);
 
 export default router;

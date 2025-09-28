@@ -10,7 +10,6 @@ function LoginForm({ toggleForm }) {
   const [showPassword, setShowPassword] = useState(false);
   const { login, message, loading } = useAuth();
 
-  // GIỮ NGUYÊN LOGIC CỦA BẠN
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -22,20 +21,17 @@ function LoginForm({ toggleForm }) {
 
   return (
     <div className="space-y-6">
-      {/* Header đẹp hơn */}
       <div className="text-center">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Đăng nhập</h2>
         <p className="text-gray-600">Chào mừng bạn trở lại</p>
       </div>
       
-      {/* Message với style đẹp hơn */}
       {message && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-3">
           <p className="text-sm text-red-600 text-center">{message}</p>
         </div>
       )}
 
-      {/* Form với styling mới */}
       <div className="space-y-5">
         <div>
           <label htmlFor="login-email" className="block text-sm font-medium text-gray-700 mb-2">
@@ -82,7 +78,6 @@ function LoginForm({ toggleForm }) {
           </div>
         </div>
 
-        {/* Button với style mới */}
         <button
           onClick={handleSubmit}
           disabled={loading}
@@ -102,7 +97,6 @@ function LoginForm({ toggleForm }) {
         </button>
       </div>
 
-      {/* Links với style mới - GIỮ NGUYÊN LOGIC */}
       <p className="text-center text-sm">
         <a 
           href="#" 

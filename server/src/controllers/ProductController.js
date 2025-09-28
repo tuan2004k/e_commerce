@@ -52,7 +52,7 @@ export const createProduct = asyncHandler(async (req, res) => {
 
   const product = await prisma.product.create({
     data: newProductData,
-    include: { category: true }, // Keep include for response if desired
+    include: { category: true }
   });
 
   res.status(201).json(product);
