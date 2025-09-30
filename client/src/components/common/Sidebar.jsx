@@ -71,10 +71,10 @@ function Sidebar({ isSidebarOpen, collapsed, toggleCollapsed, toggleSidebar }) {
         {/* Logo */}
         <div className="flex items-center justify-center p-6 border-b border-gray-200">
           {collapsed ? (
-            <img src="./public/vite.svg" alt="Logo" className="w-8 h-8" />
+            <img src="../public/vite.svg" alt="Logo" className="w-8 h-8" />
           ) : (
             <div className="flex items-center space-x-2">
-              <img src="./public/vite.svg" alt="Logo" className="w-8 h-8" />
+              <img src="../public/vite.svg" alt="Logo" className="w-8 h-8" />
               <span className="text-lg font-bold">Admin Panel</span>
             </div>
           )}

@@ -27,7 +27,7 @@ export const getProfile = asyncHandler(async (req, res) => {
 });
 
 export const forgotPassword = asyncHandler(async (req, res) => {
-  const { email } = req.body;
+  const { email } = req.body; 
   const result = await authService.forgotPasswordUser(email);
   res.status(200).json(result);
 });

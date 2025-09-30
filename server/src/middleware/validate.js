@@ -29,7 +29,7 @@ export const validateLogin = (req, res, next) => {
 
   try {
     isRequired(email, 'Email');
-    isRequired(password, 'Password');
+    isRequired(password, 'Mật khẩu');
 
     if (!isValidEmail(email)) {
       return res.status(400).json({ message: 'Email không hợp lệ' });
@@ -60,7 +60,7 @@ export const validateResetPassword = (req, res, next) => {
   const { password } = req.body;
 
   try {
-    isRequired(password, 'Password');
+    isRequired(password, 'Mật khẩu');
     if (!isValidPassword(password)) {
       return res.status(400).json({
         message: 'Mật khẩu phải có ít nhất 8 ký tự, chứa ít nhất một chữ hoa, một chữ thường và một số',

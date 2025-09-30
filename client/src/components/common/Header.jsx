@@ -8,7 +8,7 @@ import {
   ChevronDown,
   ChevronRight,
 } from "lucide-react";
-import UserProfileDropdown from './UserProfileDropdown'; 
+import UserProfileDropdown from './UserProfileDropdown';
 
 function Header({
   toggleSidebar,
@@ -22,11 +22,11 @@ function Header({
 
   return (
     <div
-      className={`bg-white border-b border-gray-200 shadow-sm px-6 py-3 flex items-center justify-between z-50 fixed top-0 right-0 transition-all duration-300
+      className={`bg-white border-b border-gray-200 shadow-sm px-6 py-4 flex items-center justify-between z-50 fixed top-0 right-0 transition-all duration-300
         ${collapsed ? "left-0 md:left-16" : "left-0 md:left-64"}
       `}
     >
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-">
         <button
           onClick={toggleSidebar}
           className="text-gray-600 md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
@@ -86,7 +86,7 @@ function Header({
             </div>
           )}
         </div>
-        <UserProfileDropdown /> 
+        <UserProfileDropdown />
 
       </div>
     </div>
