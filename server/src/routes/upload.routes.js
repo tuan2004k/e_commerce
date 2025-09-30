@@ -1,6 +1,8 @@
 import express from 'express';
 import upload from '../middleware/uploadMiddleware.js';
 import { successResponse, errorResponse } from '../utils/responseUtils.js';
+import cloudinary from '../config/Cloudinary.js'; // Import default export
+import fs from 'fs';
 
 const router = express.Router();
 
@@ -15,7 +17,7 @@ const router = express.Router();
  * @swagger
  * /api/upload/image:
  *   post:
- *     summary: Upload a single image file
+ *     summary: Upload a single image file to Cloudinary
  *     tags: [Upload]
  *     security:
  *       - bearerAuth: []
@@ -26,7 +28,7 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               image:    # <------ name of your file input
+ *               image:
  *                 type: string
  *                 format: binary
  *     responses:
@@ -44,8 +46,9 @@ const router = express.Router();
  *                 data:
  *                   type: object
  *                   properties:
- *                     filePath:
+ *                     url:
  *                       type: string
+ *                       description: URL of the uploaded image on Cloudinary
  *       400:
  *         description: Invalid file type or no file uploaded
  *       401:
@@ -54,13 +57,18 @@ const router = express.Router();
  *         description: Server error
  */
 router.post('/image', upload.single('image'), (req, res) => {
+  console.log('Request body:', req.body);
+  console.log('Request file:', req.file);
   try {
     if (!req.file) {
-      return errorResponse(res, 'No file uploaded', 400);
+      console.log('No file uploaded');
+      return errorResponse(res, 'Không có file được upload', 400);
     }
-    successResponse(res, 'Image uploaded successfully', { filePath: `/uploads/${req.file.filename}` });
+    console.log('Upload success, URL:', req.file.path);
+    successResponse(res, 'Upload thành công', { url: req.file.path });
   } catch (error) {
-    errorResponse(res, error.message, 500);
+    console.error('Upload error:', error);
+    errorResponse(res, 'Lỗi upload: ' + error.message, 500);
   }
 });
 

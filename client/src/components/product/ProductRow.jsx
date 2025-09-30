@@ -28,7 +28,7 @@ function ProductRow({
                     <div className="flex items-center">
                         {product.image ? (
                             <img
-                                src={`${new URL(import.meta.env.VITE_API_URL).origin}${product.image}`}
+                                src={product.image} // Sử dụng trực tiếp URL Cloudinary
                                 alt={product.name}
                                 className="w-10 h-10 rounded-lg object-cover border border-gray-200"
                             />
@@ -109,11 +109,10 @@ function ProductRow({
                 <tr className="bg-blue-50">
                     <td colSpan="10" className="px-4 py-4">
                         <div className="flex flex-col md:flex-row gap-4 p-4 bg-white rounded-xl shadow-sm border border-blue-100">
-                            {/* Hình ảnh lớn */}
                             <div className="flex-shrink-0 flex justify-center">
                                 {product.image ? (
                                     <img
-                                        src={`${new URL(import.meta.env.VITE_API_URL).origin}${product.image}`}
+                                        src={product.image} 
                                         alt={product.name}
                                         className="w-32 h-32 md:w-40 md:h-40 object-cover rounded-lg border-2 border-blue-200"
                                     />

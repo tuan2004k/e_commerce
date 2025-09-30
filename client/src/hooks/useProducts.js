@@ -10,7 +10,7 @@ const useProducts = () => {
     try {
       setLoading(true);
       const data = await getProducts();
-      setProducts(data);
+      setProducts(data);  
     } catch (err) {
       setError(err);
     } finally {

@@ -14,6 +14,84 @@ const router = express.Router();
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *         - stock
+ *         - categoryId
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: The auto-generated ID of the product
+ *         name:
+ *           type: string
+ *           description: The name of the product
+ *         description:
+ *           type: string
+ *           description: The description of the product
+ *         price:
+ *           type: number
+ *           format: float
+ *           description: The price of the product
+ *         stock:
+ *           type: integer
+ *           description: The stock quantity of the product
+ *         image:
+ *           type: string
+ *           format: uri
+ *           description: The URL of the product image on Cloudinary
+ *         size:
+ *           type: string
+ *           description: The size of the product
+ *         color:
+ *           type: string
+ *           description: The color of the product
+ *         categoryId:
+ *           type: integer
+ *           description: The ID of the category
+ *         category:
+ *           $ref: '#/components/schemas/Category'
+ *     ProductInput:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *         - stock
+ *         - categoryId
+ *       properties:
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         price:
+ *           type: number
+ *           format: float
+ *         stock:
+ *           type: integer
+ *         size:
+ *           type: string
+ *         color:
+ *           type: string
+ *         categoryId:
+ *           type: integer
+ *         image:
+ *           type: string
+ *           format: binary
+ *     Category:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         name:
+ *           type: string
+ */
+
+/**
+ * @swagger
  * /api/products:
  *   get:
  *     summary: Get all products
@@ -42,29 +120,15 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             required:
- *               - name
- *               - price
- *               - stock
- *               - categoryId
+ *               - productData
  *             properties:
- *               name:
+ *               productData:
  *                 type: string
- *               description:
- *                 type: string
- *               price:
- *                 type: number
- *                 format: float
- *               stock:
- *                 type: integer
- *               size:
- *                 type: string
- *               color:
- *                 type: string
- *               categoryId:
- *                 type: integer
+ *                 description: JSON string containing product details
  *               image:
  *                 type: string
  *                 format: binary
+ *                 description: The image file to upload
  *     responses:
  *       201:
  *         description: Product created successfully
@@ -124,9 +188,19 @@ router.post('/', protect, authorize(['ADMIN']), upload.single('image'), createPr
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/ProductInput'
+ *             type: object
+ *             required:
+ *               - productData
+ *             properties:
+ *               productData:
+ *                 type: string
+ *                 description: JSON string containing updated product details
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: The new image file to upload (optional)
  *     responses:
  *       200:
  *         description: Product updated successfully
