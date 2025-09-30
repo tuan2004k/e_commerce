@@ -6,7 +6,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'ecommerce_uploads',
-    allowed_formats: ['jpg', 'png', 'jpeg', 'webp'], // Thêm 'webp'
+    allowed_formats: ['jpg', 'png', 'jpeg', 'webp'], 
     public_id: (req, file) => `${file.fieldname}-${Date.now()}`,
   },
 });

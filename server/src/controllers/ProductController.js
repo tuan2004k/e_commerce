@@ -34,7 +34,7 @@ export const createProduct = asyncHandler(async (req, res) => {
 
   let imagePath = null;
   if (req.file) {
-    imagePath = req.file.path; // Sử dụng URL Cloudinary từ CloudinaryStorage
+    imagePath = req.file.path; 
     console.log("Server - New image uploaded for create:", imagePath);
   }
 
@@ -43,7 +43,7 @@ export const createProduct = asyncHandler(async (req, res) => {
     description,
     price: parseFloat(price),
     stock: parseInt(stock),
-    image: imagePath, // Lưu URL Cloudinary
+    image: imagePath, 
     size,
     color,
     categoryId: parseInt(categoryId),
@@ -79,12 +79,12 @@ export const updateProduct = asyncHandler(async (req, res) => {
 
   const { name, description, price, stock, size, color, categoryId } = productData;
 
-  let imagePath = existingProduct.image; // Giữ URL cũ nếu không upload mới
+  let imagePath = existingProduct.image; 
 
   if (req.file) {
-    imagePath = req.file.path; // Cập nhật với URL Cloudinary mới
+    imagePath = req.file.path; 
   } else if (productData.image === null) {
-    imagePath = null; // Xóa ảnh nếu `image` trong productData là null
+    imagePath = null; 
   }
 
   const dataToUpdate = {
